@@ -1,0 +1,52 @@
+:host {
+    display: inline-block;
+    position: relative;
+    font-size: 0;
+    overflow: hidden;
+    width: 100%;
+}
+
+:host * {
+    box-sizing: border-box;
+}
+
+:root {
+    width: 100%;
+}
+
+.painter {
+    width: 100%;
+}
+
+.grid-painter {
+    position: relative;
+    width: 100%;
+    aspect-ratio: var(--ratio);
+    isolation: isolate;
+    .layer {
+        mix-blend-mode: multiply;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-columns: repeat(var(--column), 1fr);
+        grid-template-rows: repeat(var(--row), 1fr);
+        transform: rotate3d(0, 0, 1, calc(var(--rad) * 1rad)) scale(var(--scale-x), var(--scale-y));
+        .cell {
+            background: var(--color);
+            border-radius: 50%;
+            transform: scale(calc(var(--size) * 1.5));
+        }
+    }
+}
+
+#img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    width: 100%;
+    visibility: hidden;
+}

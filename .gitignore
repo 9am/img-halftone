@@ -1,0 +1,9 @@
+**/node_modules
+**/dist
+**/img
+**/vite.config.ts.*.mjs
+*.tgz
+*.log
+*.swp
+.DS_Store
+package-lock.json

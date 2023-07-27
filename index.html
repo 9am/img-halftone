@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>@9am/halftone</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            box-sizing: border-box;
+        }
+        body {
+            padding: 0 20px;
+        }
+        canvas, img {
+            width: 100%;
+        }
+
+        .blend {
+            isolation: isolate;
+            position: relative;
+            width: 100px;
+            height: 100px;
+        }
+        .dot {
+            mix-blend-mode: multiply;
+            position: absolute;
+            width: 60%;
+            height: 60%;
+        }
+        .cyan {
+            top: 0;
+            left: 0;
+            background: cyan;
+        }
+        .magenta {
+            background: magenta;
+            top: 0;
+            right: 0;
+        }
+        .yellow {
+            background: yellow;
+            bottom: 0;
+            right: 0;
+        }
+        .black {
+            background: #333;
+            bottom: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body>
+    <button>update</button>
+    <div class="blend">
+        <div class="dot cyan"></div>
+        <div class="dot magenta"></div>
+        <div class="dot yellow"></div>
+        <div class="dot black"></div>
+    </div>
+    <img-halftone src="./img/bridge.jpeg"></img-halftone>
+
+    <script type="module">
+        import './src/index.ts';
+
+        document.querySelector('button').addEventListener('click', () => {
+            document.querySelector('img-halftone').src = "/img/lamp.webp";
+        });
+    </script>
+</body>
+</html>
