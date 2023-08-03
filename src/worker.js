@@ -16,7 +16,7 @@ const getAvg = (data) => {
     return sum / len;
 };
 
-const getImageData = (input, w, sx, sy, sw, sh) => {
+const getImageData = (input, w, h, sx, sy, sw, sh) => {
     const data = [];
     for (let j = 0; j < sh; j++) {
         for (let i = 0; i < sw; i++) {
@@ -28,11 +28,12 @@ const getImageData = (input, w, sx, sy, sw, sh) => {
             }
         }
     }
-    return { data };
+    return data;
 };
 
 const getCells = ({ origin, vw, vh, cellSize, name }) => {
     const [cw, ch] = cellSize;
+    const colorPicker = color.get(name);
     const next = [];
 
     // convert channel color
@@ -40,7 +41,7 @@ const getCells = ({ origin, vw, vh, cellSize, name }) => {
     for (let i = 0; i < len; i += 4) {
         const [r, g, b] = [origin[i] / 255, origin[i + 1] / 255, origin[i + 2] / 255];
         const k = 1 - Math.max(r, g, b);
-        let val = color.get(name)({ k, r, g, b });
+        let val = colorPicker({ k, r, g, b });
         next.push(val);
     }
 
@@ -50,8 +51,8 @@ const getCells = ({ origin, vw, vh, cellSize, name }) => {
     const cells = [];
     for (let j = 0; j < row; j++) {
         for (let i = 0; i < column; i++) {
-            const cell = getImageData(next, vw, i * cw, j * ch, cw, ch);
-            const avg = getAvg(cell.data, 1);
+            const cell = getImageData(next, vw, vh, i * cw, j * ch, cw, ch);
+            const avg = getAvg(cell, 1);
             const size = toFixed(avg);
             cells.push(size);
         }
@@ -59,6 +60,6 @@ const getCells = ({ origin, vw, vh, cellSize, name }) => {
     return { cells, column, row };
 };
 
-self.onmessage = async (evt) => {
+self.onmessage = (evt) => {
     postMessage(getCells(evt.data));
 };

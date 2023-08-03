@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+    <meta charset="utf-8">
     <title>@9am/halftone</title>
     <style>
         * {
@@ -50,6 +51,7 @@
     </style>
 </head>
 <body>
+    <h1>🥑</h1>
     <button>update</button>
     <div class="blend">
         <div class="dot cyan"></div>
@@ -57,13 +59,17 @@
         <div class="dot yellow"></div>
         <div class="dot black"></div>
     </div>
-    <img-halftone src="./img/bridge.jpeg"></img-halftone>
+    <img-halftone src="./img/friut.jpeg" shape="circle"></img-halftone>
 
+    <!--
+    <script type="module" src="https://cdn.skypack.dev/@9am/img-halftone"></script>
+    <script src="https://www.unpkg.com/@9am/img-halftone"></script>
+    -->
     <script type="module">
         import './src/index.ts';
 
         document.querySelector('button').addEventListener('click', () => {
-            document.querySelector('img-halftone').src = "/img/lamp.webp";
+            document.querySelector('img-halftone').src = "/img/lamp2.webp";
         });
     </script>
 </body>

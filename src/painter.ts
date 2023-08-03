@@ -1,18 +1,59 @@
 import type { Painter, Pair } from './types';
+import { Shape } from './types';
 import Channel from './channel';
 
 const dpr = window.devicePixelRatio || 1;
 
+const drawSides = (n: number, path: Path2D, x: number, y: number, r: number) => {
+    let i = 0;
+    while (i < n) {
+        const moveFn = i === 0 ? path.moveTo : path.lineTo;
+        const angle = (i * Math.PI * 2) / n;
+        moveFn.call(path, x + r * Math.cos(angle), y + r * Math.sin(angle));
+        i++;
+    }
+};
+
 export class CanvasPainter implements Painter {
+    static shapeMap = new Map<Shape, Function>([
+        [
+            Shape.CIRCLE,
+            (path: Path2D, x: number, y: number, w: number, h: number, size: number) => {
+                const r = size * w * 0.7;
+                path.moveTo(x, y);
+                path.arc(x, y, r, 0, Math.PI * 2);
+            },
+        ],
+        [
+            Shape.TRIANGLE,
+            (path: Path2D, x: number, y: number, w: number, h: number, size: number) => {
+                drawSides(3, path, x, y, size * w * 0.7);
+            },
+        ],
+        [
+            Shape.RECTANGLE,
+            (path: Path2D, x: number, y: number, w: number, h: number, size: number) => {
+                drawSides(4, path, x, y, size * w * 0.7);
+            },
+        ],
+        [
+            Shape.HEXAGON,
+            (path: Path2D, x: number, y: number, w: number, h: number, size: number) => {
+                drawSides(6, path, x, y, size * w * 0.7);
+            },
+        ],
+    ]);
     dom: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
+    private shape: Function;
 
-    constructor() {
+    constructor({ shape }: { shape: Shape }) {
         this.dom = document.createElement('canvas');
         this.dom.classList.add('painter', 'canvas-painter');
         this.ctx = <CanvasRenderingContext2D>this.dom.getContext('2d', {
             antialias: false,
         });
+        this.shape = CanvasPainter.shapeMap.get(shape)!;
     }
 
     draw(channels: Channel[], size: Pair) {
@@ -29,16 +70,10 @@ export class CanvasPainter implements Painter {
             const [column, row] = channel.size;
             const [cw, ch] = channel.cellSize;
             const path = new Path2D();
-            const factor = 0.7;
             channel.cells.forEach((size: number, index: number) => {
                 const [i, j] = [index % column, Math.floor(index / column)];
-                const [x, y, r] = [
-                    i * cw + cw * 0.5,
-                    j * ch + ch * 0.5,
-                    size * cw * factor,
-                ];
-                path.moveTo(x, y);
-                path.arc(x, y, r, 0, Math.PI * 2);
+                const [x, y] = [i * cw + cw * 0.5, j * ch + ch * 0.5];
+                this.shape(path, x, y, cw, ch, size);
             });
             this.ctx.fill(path);
             this.ctx.resetTransform();

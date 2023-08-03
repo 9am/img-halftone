@@ -1,5 +1,6 @@
 import css from './index.css?inline';
 import type { Pair } from './types';
+import { Shape } from './types';
 import { CanvasPainter, GridPainter } from './painter';
 import Channel from './channel';
 
@@ -33,7 +34,10 @@ class ImgHalftone extends HTMLElement {
         super();
         this.attachShadow({ mode: 'open' });
         this.shadowRoot!.append(template.content.cloneNode(true));
-        this.painter = this.varient === 'grid' ? new GridPainter() : new CanvasPainter();
+        this.painter =
+            this.varient === 'grid'
+                ? new GridPainter()
+                : new CanvasPainter({ shape: this.shape });
         this.channels = [
             new Channel({ name: 'key', color: '#333', deg: 45 }),
             new Channel({ name: 'cyan', color: 'cyan', deg: 15 }),
@@ -123,16 +127,13 @@ class ImgHalftone extends HTMLElement {
         return this.getAttribute('varient') ?? 'canvas';
     }
 
-    set varient(val: string) {
-        this.setAttribute('varient', val);
-    }
-
     get cellsize(): number {
         return +this.getAttribute('cellsize')! || 4;
     }
 
-    set cellsize(val: number) {
-        this.setAttribute('cellsize', val + '');
+    get shape(): Shape {
+        const val = this.getAttribute('shape') as Shape;
+        return Object.values(Shape).includes(val) ? val : Shape.CIRCLE;
     }
 }
 

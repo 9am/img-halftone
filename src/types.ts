@@ -14,3 +14,10 @@ export type ChannelOptions = {
     cellSize?: Pair;
     color?: string;
 };
+
+export enum Shape {
+    CIRCLE = 'circle',
+    TRIANGLE = 'triangle',
+    RECTANGLE = 'rectangle',
+    HEXAGON = 'hexagon',
+}

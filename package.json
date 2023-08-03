@@ -1,6 +1,6 @@
 {
   "name": "@9am/img-halftone",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A web component turns <img> into halftone.",
   "keywords": [
     "img",
