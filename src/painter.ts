@@ -82,11 +82,16 @@ export class CanvasPainter implements Painter {
 }
 
 export class GridPainter implements Painter {
+    static randomChar = () => {
+        const r = Math.floor(Math.random() * 99 + 30);
+        return String.fromCharCode(r);
+    };
+
     dom: HTMLElement;
 
-    constructor() {
+    constructor({ shape }: { shape: Shape }) {
         this.dom = document.createElement('div');
-        this.dom.classList.add('painter', 'grid-painter');
+        this.dom.classList.add('painter', 'grid-painter', shape);
     }
 
     private createLayer(channel: Channel, w: number, h: number) {
@@ -104,6 +109,7 @@ export class GridPainter implements Painter {
             const cell = document.createElement('div');
             cell.classList.add('cell');
             cell.style.setProperty('--size', `${size}`);
+            cell.style.setProperty('--char', `'${GridPainter.randomChar()}'`);
             memo.append(cell);
             return memo;
         }, document.createDocumentFragment());

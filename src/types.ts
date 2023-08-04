@@ -20,4 +20,5 @@ export enum Shape {
     TRIANGLE = 'triangle',
     RECTANGLE = 'rectangle',
     HEXAGON = 'hexagon',
+    CHAR = 'char',
 }

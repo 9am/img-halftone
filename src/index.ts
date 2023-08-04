@@ -36,7 +36,7 @@ class ImgHalftone extends HTMLElement {
         this.shadowRoot!.append(template.content.cloneNode(true));
         this.painter =
             this.varient === 'grid'
-                ? new GridPainter()
+                ? new GridPainter({ shape: this.shape })
                 : new CanvasPainter({ shape: this.shape });
         this.channels = [
             new Channel({ name: 'key', color: '#333', deg: 45 }),

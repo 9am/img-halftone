@@ -19,6 +19,7 @@
 }
 
 .grid-painter {
+    --r: 50%;
     position: relative;
     width: 100%;
     aspect-ratio: var(--ratio);
@@ -36,8 +37,42 @@
         transform: rotate3d(0, 0, 1, calc(var(--rad) * 1rad)) scale(var(--scale-x), var(--scale-y));
         .cell {
             background: var(--color);
-            border-radius: 50%;
+            border-radius: 100%;
             transform: scale(calc(var(--size) * 1.5));
+            clip-path: polygon(
+                calc(var(--r) + var(--r) * cos(0)) calc(var(--r) + var(--r) * sin(0)),
+                calc(var(--r) + var(--r) * cos(var(--sl))) calc(var(--r) + var(--r) * sin(var(--sl))),
+                calc(var(--r) + var(--r) * cos(var(--sl) * 2)) calc(var(--r) + var(--r) * sin(var(--sl) * 2)),
+                calc(var(--r) + var(--r) * cos(var(--sl) * 3)) calc(var(--r) + var(--r) * sin(var(--sl) * 3)),
+                calc(var(--r) + var(--r) * cos(var(--sl) * 4)) calc(var(--r) + var(--r) * sin(var(--sl) * 4)),
+                calc(var(--r) + var(--r) * cos(var(--sl) * 5)) calc(var(--r) + var(--r) * sin(var(--sl) * 5))
+            );
+        }
+    }
+}
+
+.grid-painter {
+    &.triangle .cell {
+        border-radius: 0;
+        --sl: 1turn / 3;
+    }
+    &.rectangle .cell {
+        border-radius: 0;
+        --sl: 1turn / 4;
+    }
+    &.hexagon .cell {
+        border-radius: 0;
+        --sl: 1turn / 6;
+    }
+    &.char .cell {
+        color: var(--color);
+        background: unset;
+        border-radius: 0;
+        font: 900 calc(100cqh / var(--row)) monospace;
+        position: relative;
+        &::before {
+            position: absolute;
+            content: var(--char);
         }
     }
 }
